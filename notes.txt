@@ -1,0 +1,97 @@
+robocopy C:\Users\wick2o\Documents\GitHub\GitHunt\ I:\ /MIR /R:0 /W:0
+for /D %i in (z*) do robocopy C:\Users\wick2o\Documents\GitHub\GitHunt\%i I:\%i /MIR /R:0 /W:0
+
+ls | egrep -i '^[a-z]' | xargs -P 27180 -I FILE find FILE -type d > /cygdrive/c/temp/all-dirsv2.txt
+
+
+ls | egrep -i "^e.*" | xargs rm -rf
+
+
+cd C:\temp
+
+export LC_ALL='C'
+cat allv2.txt | sort | uniq -i -c | sort -r | sed 's/^ *//g' > all.txt
+
+
+mkdir content
+mkdir cat
+mkdir cat/conf
+mkdir cat/database
+mkdir cat/language
+mkdir cat/project
+mkdir sec
+
+
+
+egrep -iv '\.' all.txt > all-extensionless.txt
+
+grep -i admin all.txt > content/admin.txt
+grep -i debug all.txt > content/debug.txt
+grep -i error all.txt > content/error.txt
+grep -i help all.txt > content/help.txt
+grep -i index all.txt > content/index.txt
+grep -i install all.txt > content/install.txt
+grep -i log all.txt > content/log.txt
+grep -i readme all.txt > content/readme.txt
+grep -i root all.txt > content/root.txt
+grep -i setup all.txt > content/setup.txt
+grep -i test all.txt > content/test.txt
+
+egrep -i '\.conf$' all.txt > cat/conf/conf.txt
+egrep -i '\.config$' all.txt > cat/conf/config.txt
+egrep -i '\.htaccess$' all.txt > cat/conf/htaccess.txt
+egrep -i '\.properties$' all.txt > cat/conf/properties.txt
+
+egrep -i '\.inc$' all.txt > cat/database/inc.txt
+egrep -i '\.ini$' all.txt > cat/database/ini.txt
+egrep -i '\.mdb$' all.txt > cat/database/mdb.txt
+egrep -i '\.mdf$' all.txt > cat/database/mdf.txt
+egrep -i '\.sql$' all.txt > cat/database/sql.txt
+egrep -i '\.xml$' all.txt > cat/database/xml.txt
+egrep -i '\.kdbx$' all.txt > cat/database/kdbx.txt
+
+egrep -i '\.ascx$' all.txt > cat/language/ascx.txt
+egrep -i '\.asp$' all.txt > cat/language/asp.txt
+egrep -i '\.aspx$' all.txt > cat/language/aspx.txt
+egrep -i '\.c$' all.txt > cat/language/c.txt
+egrep -i '\.cfm$' all.txt > cat/language/cfm.txt
+egrep -i '\.cpp$' all.txt > cat/language/cpp.txt
+egrep -i '\.cs$' all.txt > cat/language/cs.txt
+egrep -i '\.css$' all.txt > cat/language/css.txt
+egrep -i '\.html$' all.txt > cat/language/html.txt
+egrep -i '\.jar$' all.txt > cat/language/jar.txt
+egrep -i '\.java$' all.txt > cat/language/java.txt
+egrep -i '\.js$' all.txt > cat/language/js.txt
+egrep -i '\.jsp$' all.txt > cat/language/jsp.txt
+egrep -i '\.php$' all.txt > cat/language/php.txt
+egrep -i '\.php3$' all.txt > cat/language/php3.txt
+egrep -i '\.php5$' all.txt > cat/language/php5.txt
+egrep -i '\.phpt$' all.txt > cat/language/phpt.txt
+egrep -i '\.pl$' all.txt > cat/language/pl.txt
+egrep -i '\.py$' all.txt > cat/language/py.txt
+egrep -i '\.rb$' all.txt > cat/language/rb.txt
+egrep -i '\.sh$' all.txt > cat/language/sh.txt
+egrep -i '\.swf$' all.txt > cat/language/swf.txt
+egrep -i '\.tpl$' all.txt > cat/language/tpl.txt
+egrep -i '\.vb$' all.txt > cat/language/vb.txt
+egrep -i '\.wsdl$' all.txt > cat/language/wsdl.txt
+
+egrep -i '\.csproj$' all.txt > cat/project/csproj.txt
+egrep -i '\.pdb$' all.txt > cat/project/pdb.txt
+egrep -i '\.resx$' all.txt > cat/project/resx.txt
+egrep -i '\.sln$' all.txt > cat/project/sln.txt
+egrep -i '\.suo$' all.txt > cat/project/suo.txt
+egrep -i '\.vbproj$' all.txt > cat/project/vbproj.txt
+
+egrep -i '\.pem$' all.txt > sec/pem.txt
+egrep -i '\.cer$' all.txt > sec/cer.txt
+egrep -i '\.key$' all.txt > sec/key.txt
+egrep -i '\.crt$' all.txt > sec/crt.txt
+egrep -i '\.jks$' all.txt > sec/jks.txt
+egrep -i '\.pfx$' all.txt > sec/pfx.txt
+egrep -i '\.pkcs10$' all.txt > sec/pkcs10.txt
+egrep -i '\.pkcs12$' all.txt > sec/pkcs12.txt
+egrep -i '\.rsa$' all.txt > sec/rsa.txt
+egrep -i '\.dsa$' all.txt > sec/dsa.txt
+egrep -i '\.ppk$' all.txt > sec/ppk.txt
+

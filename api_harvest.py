@@ -15,7 +15,6 @@ import Queue
 import shutil
 import git
 import gc
-import datetime
 
 halt = False
 
@@ -49,14 +48,14 @@ socket.setdefaulttimeout(120)
 
 rate_limit_left = 5000
 
-def get_repos(last_seen, user, u_pass):
+def get_repos(last_seen): #, user, u_pass):
 	global rate_limit_left
 	
 	url = 'https://api.github.com/repositories?since=%s' % (last_seen)
 	req = urllib2.Request(url)
 	req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.2; WOW64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1')
-	b64s = base64.encodestring('%s:%s' % (user, u_pass))
-	req.add_header('Authorization', 'Basic %s' % b64s)
+	#b64s = base64.encodestring('%s:%s' % (user, u_pass))
+	#req.add_header('Authorization', 'Basic %s' % b64s)
 	
 	page = urllib2.urlopen(req)
 	page_content = page.read()
@@ -69,23 +68,19 @@ def get_repos(last_seen, user, u_pass):
 
 def setup():
 	parser = argparse.ArgumentParser()
-	parser.add_argument('-u', '--username', action='store', dest='username', required=True, help='github username')
-	parser.add_argument('-p', '--password', action='store', dest='password', required=True, help='github password')
+	#parser.add_argument('-u', '--username', action='store', dest='username', required=True, help='github username')
+	#parser.add_argument('-p', '--password', action='store', dest='password', required=True, help='github password')
 	parser.add_argument('-o', '--output', action='store', dest='output', required=True, help='base path for output')
 	
 	global args
 	args = parser.parse_args()
 	
 def worker(itm):
-
+	#p = subprocess.Popen(['git', 'clone', itm['clone_url'], itm['path']])
+	#p.wait
 	try:
 		o_path = '%s//%s' % (args.output, itm['path'])
 		res = git.Git().clone(itm['clone_url'], o_path)
-		tmp_item = {}
-		tmp_item['username'] = itm['path'].split('/')[0].strip()
-		tmp_item['name'] = itm['path'].split('/')[1].strip()
-		need_processed.append(tmp_item)
-		del tmp_item
 		print '%s\n' % res
 	except:
 		pass
@@ -93,18 +88,15 @@ def worker(itm):
 def main():
 	setup()
 
-	last_seen = 503102
+	last_seen = 441803
 	
 	while rate_limit_left > 5:
-		repos = get_repos(last_seen, args.username,args.password)
+		repos = get_repos(last_seen)#, args.username,args.password)
 	
 		jsonrepos = json.loads(repos)
 
 		q = Queue.Queue()
 		threads = []
-		
-		global need_processed
-		need_processed = []
 
 		for repo in jsonrepos:
 			#print repo['full_name']
@@ -144,24 +136,12 @@ def main():
 		f.write('Current rate_limit_left: %s  Current last_seen: %s...' % (rate_limit_left, last_seen))
 		f.close()
 		
-		f_name = '%s.log' % (datetime.datetime.now().strftime("%Y-%m-%d"))
-		f=open(f_name, 'a')
-		for itm in need_processed:
-			f.write('INSERT INTO projects (username, name) VALUES ("%s", "%s");\n' % (itm['username'], itm['name']))
-		f.close()
-		
-		print 'updated needsproccessed.txt\n'
-		
 		del jsonrepos
 		del q
 		del threads
 		
 		gc.collect()
 		#time.sleep(700)
-		
-		print 'You have 5 secs to quit this script...'
-		time.sleep(5)
-		print 'Moving right alone...'
 				
 				
 				

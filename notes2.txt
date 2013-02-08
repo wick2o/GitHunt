@@ -1,0 +1,23 @@
+
+	
+for os.walk
+	r,d,f
+	
+	
+	for each dir in d:
+		check to see if its already into the database
+			if yes: add +1 to the count
+			if no: insert new value into table default count = 1
+			
+			
+cd /cygdrive/c/temp
+
+sqlite3 words.db
+CREATE TABLE files (id INTEGER PRIMARY KEY, name varchar(255), count int DEFAULT 1);
+CREATE TABLE dirs (id INTEGER PRIMARY KEY, name varchar(255), count int DEFAULT 1);
+CREATE TABLE projects (id INTEGER PRIMARY KEY, username varchar(255), name varchar(255), processed int DEFAULT 0);
+.quit
+
+
+
+
