@@ -1,5 +1,10 @@
-robocopy C:\Users\wick2o\Documents\GitHub\GitHunt\ I:\ /MIR /R:0 /W:0
-for /D %i in (z*) do robocopy C:\Users\wick2o\Documents\GitHub\GitHunt\%i I:\%i /MIR /R:0 /W:0
+remove all HEAD files
+
+git fetch
+
+
+robocopy J: K:\repos/ /MIR /R:0 /W:0
+for /D %i in (*) do robocopy J:\%i K:\repos\%i /MIR /R:0 /W:0 /MOVE /NP
 
 ls | egrep -i '^[a-z]' | xargs -P 27180 -I FILE find FILE -type d > /cygdrive/c/temp/all-dirsv2.txt
 
@@ -7,10 +12,28 @@ ls | egrep -i '^[a-z]' | xargs -P 27180 -I FILE find FILE -type d > /cygdrive/c/
 ls | egrep -i "^e.*" | xargs rm -rf
 
 
+email: ^[a-zA-Z0-9\.=+\\|!\$?_-]*$  (all lines with no @ in them)
+email: ^[a-zA-Z0-9=+\\|!\$\@?_-]*$  (all linlese with @ but no .'s )
+
 cd C:\temp
 
 export LC_ALL='C'
 cat allv2.txt | sort | uniq -i -c | sort -r | sed 's/^ *//g' > all.txt
+
+
+add2database.py -d C:\temp\words.db -f C:\temp\grep_results\passwords_01.txt -t passwords
+
+vim -c %s/old/new/g -c wq somefile.txt
+
+for i in `cat usernames.txt | cut -d " " -f 2`; do echo ":%s/.*['\"]$i['\"].*/$i/g" >> u_temp.txt; done
+cat usernames.txt | sort > usernames2.txt && mv usernames2.txt usernames.txt && vim usernames.txt
+
+
+
+in cygwin
+
+cd '/cygdrive/c/Documents and Settings/wick2o/Documents/GitHub/gitDigger'
+
 
 
 mkdir content
@@ -22,76 +45,102 @@ mkdir cat/project
 mkdir sec
 
 
+mysql -h172.16.1.122 -uroot -ptoor -Dgitdigger -N -e 'SELECT count,name FROM files ORDER BY count desc' | awk '{print $1" " substr($0, index($0,$2))}' > all_files.txt
+mysql -h172.16.1.122 -uroot -ptoor -Dgitdigger -N -e 'SELECT count,name FROM dirs ORDER BY count desc' | awk '{print $1" " substr($0, index($0,$2))}' > all_dirs.txt
+mysql -h172.16.1.122 -uroot -ptoor -Dgitdigger -N -e 'SELECT count,name FROM passwords ORDER BY count desc' | awk '{print $1" " substr($0, index($0,$2))}' > passwords.txt
+mysql -h172.16.1.122 -uroot -ptoor -Dgitdigger -N -e 'SELECT count,name FROM usernames ORDER BY count desc' | awk '{print $1" " substr($0, index($0,$2))}' > usernames.txt
+mysql -h172.16.1.122 -uroot -ptoor -Dgitdigger -N -e 'SELECT count,name FROM salts ORDER BY count desc' | awk '{print $1" " substr($0, index($0,$2))}' > static_salts.txt
+mysql -h172.16.1.122 -uroot -ptoor -Dgitdigger -N -e 'SELECT count,name FROM emails ORDER BY count desc' | awk '{print $1" " substr($0, index($0,$2))}' > emails.txt
 
-egrep -iv '\.' all.txt > all-extensionless.txt
 
-grep -i admin all.txt > content/admin.txt
-grep -i debug all.txt > content/debug.txt
-grep -i error all.txt > content/error.txt
-grep -i help all.txt > content/help.txt
-grep -i index all.txt > content/index.txt
-grep -i install all.txt > content/install.txt
-grep -i log all.txt > content/log.txt
-grep -i readme all.txt > content/readme.txt
-grep -i root all.txt > content/root.txt
-grep -i setup all.txt > content/setup.txt
-grep -i test all.txt > content/test.txt
+ 
+egrep -iv '\.' all_files.txt > all-extensionless.txt
 
-egrep -i '\.conf$' all.txt > cat/conf/conf.txt
-egrep -i '\.config$' all.txt > cat/conf/config.txt
-egrep -i '\.htaccess$' all.txt > cat/conf/htaccess.txt
-egrep -i '\.properties$' all.txt > cat/conf/properties.txt
+grep -i admin all_files.txt > content/admin.txt
+grep -i debug all_files.txt > content/debug.txt
+grep -i error all_files.txt > content/error.txt
+grep -i help all_files.txt > content/help.txt
+grep -i index all_files.txt > content/index.txt
+grep -i install all_files.txt > content/install.txt
+grep -i log all_files.txt > content/log.txt
+grep -i readme all_files.txt > content/readme.txt
+grep -i root all_files.txt > content/root.txt
+grep -i setup all_files.txt > content/setup.txt
+grep -i test all_files.txt > content/test.txt
 
-egrep -i '\.inc$' all.txt > cat/database/inc.txt
-egrep -i '\.ini$' all.txt > cat/database/ini.txt
-egrep -i '\.mdb$' all.txt > cat/database/mdb.txt
-egrep -i '\.mdf$' all.txt > cat/database/mdf.txt
-egrep -i '\.sql$' all.txt > cat/database/sql.txt
-egrep -i '\.xml$' all.txt > cat/database/xml.txt
-egrep -i '\.kdbx$' all.txt > cat/database/kdbx.txt
+egrep -i '\.conf$' all_files.txt > cat/conf/conf.txt
+egrep -i '\.config$' all_files.txt > cat/conf/config.txt
+egrep -i '\.htaccess$' all_files.txt > cat/conf/htaccess.txt
+egrep -i '\.properties$' all_files.txt > cat/conf/properties.txt
 
-egrep -i '\.ascx$' all.txt > cat/language/ascx.txt
-egrep -i '\.asp$' all.txt > cat/language/asp.txt
-egrep -i '\.aspx$' all.txt > cat/language/aspx.txt
-egrep -i '\.c$' all.txt > cat/language/c.txt
-egrep -i '\.cfm$' all.txt > cat/language/cfm.txt
-egrep -i '\.cpp$' all.txt > cat/language/cpp.txt
-egrep -i '\.cs$' all.txt > cat/language/cs.txt
-egrep -i '\.css$' all.txt > cat/language/css.txt
-egrep -i '\.html$' all.txt > cat/language/html.txt
-egrep -i '\.jar$' all.txt > cat/language/jar.txt
-egrep -i '\.java$' all.txt > cat/language/java.txt
-egrep -i '\.js$' all.txt > cat/language/js.txt
-egrep -i '\.jsp$' all.txt > cat/language/jsp.txt
-egrep -i '\.php$' all.txt > cat/language/php.txt
-egrep -i '\.php3$' all.txt > cat/language/php3.txt
-egrep -i '\.php5$' all.txt > cat/language/php5.txt
-egrep -i '\.phpt$' all.txt > cat/language/phpt.txt
-egrep -i '\.pl$' all.txt > cat/language/pl.txt
-egrep -i '\.py$' all.txt > cat/language/py.txt
-egrep -i '\.rb$' all.txt > cat/language/rb.txt
-egrep -i '\.sh$' all.txt > cat/language/sh.txt
-egrep -i '\.swf$' all.txt > cat/language/swf.txt
-egrep -i '\.tpl$' all.txt > cat/language/tpl.txt
-egrep -i '\.vb$' all.txt > cat/language/vb.txt
-egrep -i '\.wsdl$' all.txt > cat/language/wsdl.txt
+egrep -i '\.inc$' all_files.txt > cat/database/inc.txt
+egrep -i '\.ini$' all_files.txt > cat/database/ini.txt
+egrep -i '\.mdb$' all_files.txt > cat/database/mdb.txt
+egrep -i '\.mdf$' all_files.txt > cat/database/mdf.txt
+egrep -i '\.sql$' all_files.txt > cat/database/sql.txt
+egrep -i '\.xml$' all_files.txt > cat/database/xml.txt
+egrep -i '\.kdbx$' all_files.txt > cat/database/kdbx.txt
 
-egrep -i '\.csproj$' all.txt > cat/project/csproj.txt
-egrep -i '\.pdb$' all.txt > cat/project/pdb.txt
-egrep -i '\.resx$' all.txt > cat/project/resx.txt
-egrep -i '\.sln$' all.txt > cat/project/sln.txt
-egrep -i '\.suo$' all.txt > cat/project/suo.txt
-egrep -i '\.vbproj$' all.txt > cat/project/vbproj.txt
+egrep -i '\.ascx$' all_files.txt > cat/language/ascx.txt
+egrep -i '\.asp$' all_files.txt > cat/language/asp.txt
+egrep -i '\.aspx$' all_files.txt > cat/language/aspx.txt
+egrep -i '\.c$' all_files.txt > cat/language/c.txt
+egrep -i '\.cfm$' all_files.txt > cat/language/cfm.txt
+egrep -i '\.cpp$' all_files.txt > cat/language/cpp.txt
+egrep -i '\.cs$' all_files.txt > cat/language/cs.txt
+egrep -i '\.css$' all_files.txt > cat/language/css.txt
+egrep -i '\.html$' all_files.txt > cat/language/html.txt
+egrep -i '\.jar$' all_files.txt > cat/language/jar.txt
+egrep -i '\.java$' all_files.txt > cat/language/java.txt
+egrep -i '\.js$' all_files.txt > cat/language/js.txt
+egrep -i '\.jsp$' all_files.txt > cat/language/jsp.txt
+egrep -i '\.php$' all_files.txt > cat/language/php.txt
+egrep -i '\.php3$' all_files.txt > cat/language/php3.txt
+egrep -i '\.php5$' all_files.txt > cat/language/php5.txt
+egrep -i '\.phpt$' all_files.txt > cat/language/phpt.txt
+egrep -i '\.pl$' all_files.txt > cat/language/pl.txt
+egrep -i '\.py$' all_files.txt > cat/language/py.txt
+egrep -i '\.rb$' all_files.txt > cat/language/rb.txt
+egrep -i '\.sh$' all_files.txt > cat/language/sh.txt
+egrep -i '\.swf$' all_files.txt > cat/language/swf.txt
+egrep -i '\.tpl$' all_files.txt > cat/language/tpl.txt
+egrep -i '\.vb$' all_files.txt > cat/language/vb.txt
+egrep -i '\.wsdl$' all_files.txt > cat/language/wsdl.txt
 
-egrep -i '\.pem$' all.txt > sec/pem.txt
-egrep -i '\.cer$' all.txt > sec/cer.txt
-egrep -i '\.key$' all.txt > sec/key.txt
-egrep -i '\.crt$' all.txt > sec/crt.txt
-egrep -i '\.jks$' all.txt > sec/jks.txt
-egrep -i '\.pfx$' all.txt > sec/pfx.txt
-egrep -i '\.pkcs10$' all.txt > sec/pkcs10.txt
-egrep -i '\.pkcs12$' all.txt > sec/pkcs12.txt
-egrep -i '\.rsa$' all.txt > sec/rsa.txt
-egrep -i '\.dsa$' all.txt > sec/dsa.txt
-egrep -i '\.ppk$' all.txt > sec/ppk.txt
+egrep -i '\.csproj$' all_files.txt > cat/project/csproj.txt
+egrep -i '\.pdb$' all_files.txt > cat/project/pdb.txt
+egrep -i '\.resx$' all_files.txt > cat/project/resx.txt
+egrep -i '\.sln$' all_files.txt > cat/project/sln.txt
+egrep -i '\.suo$' all_files.txt > cat/project/suo.txt
+egrep -i '\.vbproj$' all_files.txt > cat/project/vbproj.txt
 
+egrep -i '\.pem$' all_files.txt > sec/pem.txt
+egrep -i '\.cer$' all_files.txt > sec/cer.txt
+egrep -i '\.key$' all_files.txt > sec/key.txt
+egrep -i '\.crt$' all_files.txt > sec/crt.txt
+egrep -i '\.jks$' all_files.txt > sec/jks.txt
+egrep -i '\.pfx$' all_files.txt > sec/pfx.txt
+egrep -i '\.pkcs10$' all_files.txt > sec/pkcs10.txt
+egrep -i '\.pkcs12$' all_files.txt > sec/pkcs12.txt
+egrep -i '\.rsa$' all_files.txt > sec/rsa.txt
+egrep -i '\.dsa$' all_files.txt > sec/dsa.txt
+egrep -i '\.ppk$' all_files.txt > sec/ppk.txt
+
+
+*********************************************************************************
+
+egrep -iR 'password.*=.* ' * >> /cygdrive/c/temp/res_passwords.txt
+egrep -iR 'username.*=.* ' * >> /cygdrive/c/temp/res_usernames.txt
+egrep -iR ' .*@.*\.[a-z]{2,4}.*' * >> /cygdrive/c/temp/res_emails.txt
+egrep -iR 'salt.*=.* ' * >> /cygdrive/c/temp/res_salts.txt
+egrep -iR '\.(mil|gov)' * >> /cygdrive/c/temp/res_govrefs.txt
+egrep -iR '(confidential|internal only)' * >> /cygdrive/c/temp/res_privatedata.txt
+egrep -iR '[0-9]{3}-[0-9]{2}-[0-9]{4}' * >> /cygdrive/c/temp/res_ssnums.txt
+egrep -iR '5\d{3}(\s|-)?\d{4}(\s|-)?\d{4}(\s|-)?\d{4}' * >> /cygdrive/c/temp/c_cards.txt
+egrep -iR '6011(\s|-)?\d{4}(\s|-)?\d{4}(\s|-)?\d{4}' * >> /cygdrive/c/temp/c_cards.txt
+egrep -iR '3\d{3}(\s|-)?\d{6}(\s|-)?\d{5}' * >> /cygdrive/c/temp/c_cards.txt
+egrep -iR '(apikey|api_key).*=.* ' * >> /cygdrive/c/temp/res_apikeys.txt
+
+common coding mistakes
+sql commands
+ipaddresses

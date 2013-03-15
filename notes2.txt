@@ -16,7 +16,49 @@ sqlite3 words.db
 CREATE TABLE files (id INTEGER PRIMARY KEY, name varchar(255), count int DEFAULT 1);
 CREATE TABLE dirs (id INTEGER PRIMARY KEY, name varchar(255), count int DEFAULT 1);
 CREATE TABLE projects (id INTEGER PRIMARY KEY, username varchar(255), name varchar(255), processed int DEFAULT 0);
+CREATE TABLE passwords (ID INTEGER PRIMARY KEY, name varchar(255), count int DEFAULT 1);
+CREATE TABLE usernames (ID INTEGER PRIMARY KEY, name varchar(255), count int DEFAULT 1);
+CREATE TABLE salts (ID INTEGER PRIMARY KEY, name varchar(255), count int DEFAULT 1);
+CREATE TABLE emails (ID INTEGER PRIMARY KEY, name varchar(255), count int DEFAULT 1);
 .quit
+
+
+ls | sort -u > /cygdrive/c/temp/dirs.txt
+
+for i in `cat /cygdrive/c/temp/dirs.txt`:
+do 
+	echo grepping $i...  
+	egrep -iR 'password.*=.* ' $i/* >> /cygdrive/c/temp/`date +'%m-%d-%y_grep_password.log'`
+	egrep -iR 'username.*=.* ' $i/* >> /cygdrive/c/temp/`date +'%m-%d-%y_grep_usernames.log'`
+	egrep -iR ' .*@.*\.[a-z]{2,4}.*' $i/* >> /cygdrive/c/temp/`date +'%m-%d-%y_grep_emails.log'`
+	egrep -iR 'salt.*=.* ' $i/* >> /cygdrive/c/temp/`date +'%m-%d-%y_grep_salts.log'`
+	egrep -iR '\.(mil|gov)' $i/* >> /cygdrive/c/temp/`date +'%m-%d-%y_grep_govrefs.log'`
+	egrep -iR '(confidential|internal only)' $i/* >> /cygdrive/c/temp/`date +'%m-%d-%y_grep_private.log'`
+	egrep -iR '[0-9]{3}-[0-9]{2}-[0-9]{4}' $i/* >> /cygdrive/c/temp/`date +'%m-%d-%y_grep_ssnums.log'`
+	egrep -iR '5\d{3}(\s|-)?\d{4}(\s|-)?\d{4}(\s|-)?\d{4}' $i/* >> /cygdrive/c/temp/`date +'%m-%d-%y_grep_ccards.log'`
+	egrep -iR '6011(\s|-)?\d{4}(\s|-)?\d{4}(\s|-)?\d{4}' $i/* >> /cygdrive/c/temp/`date +'%m-%d-%y_grep_ccards.log'`
+	egrep -iR '3\d{3}(\s|-)?\d{6}(\s|-)?\d{5}' $i/* >> /cygdrive/c/temp/`date +'%m-%d-%y_grep_ccards.log'`
+	egrep -iR '(apikey|api_key).*=.* ' $i/* >> /cygdrive/c/temp/`date +'%m-%d-%y_grep_apikeys.log'`
+done
+
+
+
+
+`date +'grep_%m-%d-%y.log'`
+
+
+
+egrep -iR 'password.*=.* ' * >> /cygdrive/c/temp/res_passwords.txt
+egrep -iR 'username.*=.* ' * >> /cygdrive/c/temp/res_usernames.txt
+egrep -iR ' .*@.*\.[a-z]{2,4}.*' * >> /cygdrive/c/temp/res_emails.txt
+egrep -iR 'salt.*=.* ' * >> /cygdrive/c/temp/res_salts.txt
+egrep -iR '\.(mil|gov)' * >> /cygdrive/c/temp/res_govrefs.txt
+egrep -iR '(confidential|internal only)' * >> /cygdrive/c/temp/res_privatedata.txt
+egrep -iR '[0-9]{3}-[0-9]{2}-[0-9]{4}' * >> /cygdrive/c/temp/res_ssnums.txt
+egrep -iR '5\d{3}(\s|-)?\d{4}(\s|-)?\d{4}(\s|-)?\d{4}' * >> /cygdrive/c/temp/c_cards.txt
+egrep -iR '6011(\s|-)?\d{4}(\s|-)?\d{4}(\s|-)?\d{4}' * >> /cygdrive/c/temp/c_cards.txt
+egrep -iR '3\d{3}(\s|-)?\d{6}(\s|-)?\d{5}' * >> /cygdrive/c/temp/c_cards.txt
+egrep -iR '(apikey|api_key).*=.* ' * >> /cygdrive/c/temp/res_apikeys.txt
 
 
 

@@ -19,6 +19,7 @@ import datetime
 
 halt = False
 
+
 try:
 	import argparse
 except:
@@ -79,7 +80,7 @@ def setup():
 def worker(itm):
 
 	try:
-		o_path = '%s//%s' % (args.output, itm['path'])
+		o_path = '%s/%s' % (args.output, itm['path'])
 		res = git.Git().clone(itm['clone_url'], o_path)
 		tmp_item = {}
 		tmp_item['username'] = itm['path'].split('/')[0].strip()
@@ -87,13 +88,13 @@ def worker(itm):
 		need_processed.append(tmp_item)
 		del tmp_item
 		print '%s\n' % res
-	except:
+except:
 		pass
-	
+		
 def main():
 	setup()
 
-	last_seen = 503102
+	last_seen = 913620
 	
 	while rate_limit_left > 5:
 		repos = get_repos(last_seen, args.username,args.password)
@@ -150,7 +151,7 @@ def main():
 			f.write('INSERT INTO projects (username, name) VALUES ("%s", "%s");\n' % (itm['username'], itm['name']))
 		f.close()
 		
-		print 'updated needsproccessed.txt\n'
+		print 'updated %s\n' % (f_name)
 		
 		del jsonrepos
 		del q
@@ -159,9 +160,9 @@ def main():
 		gc.collect()
 		#time.sleep(700)
 		
-		print 'You have 5 secs to quit this script...'
-		time.sleep(5)
-		print 'Moving right alone...'
+		print 'You have 15 secs to quit this script...'
+		time.sleep(15)
+		print 'Moving right along...'
 				
 				
 				
